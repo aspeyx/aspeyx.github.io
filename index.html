@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Viewer Karakter Minecraft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Viewer Minecraft</title>
   <style>
     body {
       margin: 0;
@@ -11,37 +11,41 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      font-family: sans-serif;
+      height: 100vh;
     }
-    #viewer {
+    canvas {
       width: 400px;
       height: 400px;
     }
   </style>
 </head>
 <body>
-  <canvas id="viewer"></canvas>
 
-  <script type="module">
-    import * as skinview3d from "https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/libs/skinview3d.js";
+<canvas id="viewer"></canvas>
 
-    const viewer = new skinview3d.SkinViewer({
-      canvas: document.getElementById("viewer"),
-      width: 400,
-      height: 400,
-      skin: "skin.png"
-    });
+<script type="module">
+import * as skinview3d from "https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/libs/skinview3d.js";
 
-    viewer.zoom = 0.8;
-    viewer.fov = 50;
+const viewer = new skinview3d.SkinViewer({
+  canvas: document.getElementById("viewer"),
+  width: 400,
+  height: 400,
+  skin: "https://minotar.net/skin/Notch"
+});
 
-    viewer.animation = new skinview3d.WalkingAnimation();
-    viewer.animation.speed = 1;
+viewer.zoom = 0.8;
+viewer.fov = 50;
 
-    viewer.controls.enableRotate = true;
-    viewer.controls.enableZoom = true;
-    viewer.controls.enablePan = false;
-  </script>
+viewer.animation = new skinview3d.WalkingAnimation();
+viewer.animation.speed = 1;
+
+// auto rotate biar keren
+viewer.autoRotate = true;
+
+viewer.controls.enableRotate = true;
+viewer.controls.enableZoom = true;
+viewer.controls.enablePan = false;
+</script>
+
 </body>
-  </html>
+</html>
