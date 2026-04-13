@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viewer Karakter Minecraft</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: sans-serif;
+    }
+    #viewer {
+      width: 400px;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="viewer"></canvas>
+
+  <script type="module">
+    import * as skinview3d from "https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/libs/skinview3d.js";
+
+    const viewer = new skinview3d.SkinViewer({
+      canvas: document.getElementById("viewer"),
+      width: 400,
+      height: 400,
+      skin: "skin.png"
+    });
+
+    viewer.zoom = 0.8;
+    viewer.fov = 50;
+
+    viewer.animation = new skinview3d.WalkingAnimation();
+    viewer.animation.speed = 1;
+
+    viewer.controls.enableRotate = true;
+    viewer.controls.enableZoom = true;
+    viewer.controls.enablePan = false;
+  </script>
+</body>
+  </html>
