@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Generator Pramuka</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f1f5f9;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.box{
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#15803d;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+    color:#333;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#16a34a;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#16a34a;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#15803d;
+}
+
+.loading{
+    margin-top:15px;
+    text-align:center;
+    color:#666;
+    display:none;
+}
+
+.footer{
+    margin-top:20px;
+    text-align:center;
+    color:#777;
+    font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Generator Pramuka</h2>
+
+<div class="form-group">
+<label>Nama</label>
+<input type="text" id="nama" placeholder="Masukkan nama">
+</div>
+
+<div class="form-group">
+<label>NTA</label>
+<input type="text" id="nta" placeholder="Masukkan NTA">
+</div>
+
+<div class="form-group">
+<label>Tempat / Tanggal Lahir</label>
+<input type="text" id="lahir" placeholder="Contoh: Wonosobo, 10 Mei 2007">
+</div>
+
+<button onclick="generate()">Download Word</button>
+
+<div class="loading" id="loading">
+Membuat dokumen...
+</div>
+
+<div class="footer">
+SMK Informatika Wonosobo
+</div>
+
+</div>
+
+<script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
+
+<script src="https://unpkg.com/docxtemplater@3.37.9/build/docxtemplater.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+
+async function generate(){
+
+    const nama = document.getElementById("nama").value.trim();
+    const nta = document.getElementById("nta").value.trim();
+    const lahir = document.getElementById("lahir").value.trim();
+
+    if(!nama || !nta || !lahir){
+        alert("Semua data wajib diisi!");
+        return;
+    }
+
+    document.getElementById("loading").style.display = "block";
+
+    try{
+
+        const response = await fetch("template.docx");
+
+        if(!response.ok){
+            throw new Error("template.docx tidak ditemukan");
+        }
+
+        const content = await response.arrayBuffer();
+
+        const zip = new PizZip(content);
+
+        const doc = new window.docxtemplater(zip,{
+            paragraphLoop:true,
+            linebreaks:true
+        });
+
+        doc.render({
+            nama:nama,
+            nta:nta,
+            lahir:lahir
+        });
+
+        const blob = doc.getZip().generate({
+            type:"blob",
+            mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        });
+
+        saveAs(blob, `${nama}.docx`);
+
+        alert("berhasil dibuat!");
+
+    }catch(error){
+
+        console.error(error);
+
+        alert("Terjadi error: " + error.message);
+
+    }
+
+    document.getElementById("loading").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
